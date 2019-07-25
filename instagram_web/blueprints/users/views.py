@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash
 from models.user import User
+from models.image import Image
 from flask_login import login_required
 
 
@@ -50,7 +51,9 @@ def show(username):
 @users_blueprint.route('/', methods=["GET"])
 @login_required
 def index():
-    return render_template('users/index.html')
+    users = User.select()
+    images = Image.select()
+    return render_template('users/index.html', users=users, images=images)
 
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])
@@ -77,7 +80,6 @@ def update(id):
     user.full_name = request.form.get('full_name')
     user.username = request.form.get('username')
     user.website = request.form.get('website')
-    breakpoint()
     user.bio = request.form.get('bio')
     user.phone_number = request.form.get('phone_number')
 
