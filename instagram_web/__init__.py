@@ -6,9 +6,11 @@ from instagram_web.blueprints.images.views import images_blueprint
 from flask_login import current_user
 from flask_assets import Environment, Bundle
 from .util.assets import bundles
+from .util.google_oauth import oauth
 
 assets = Environment(app)
 assets.register(bundles)
+oauth.init_app(app)
 
 app.register_blueprint(users_blueprint, url_prefix="/users")
 app.register_blueprint(sessions_blueprint, url_prefix="/sessions")

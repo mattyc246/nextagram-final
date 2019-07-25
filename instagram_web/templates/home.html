@@ -14,9 +14,12 @@
         <h6 class="text-muted text-center">
           Sign up to see photos and videos from your friends.
         </h6>
-        <button class="btn btn-primary w-100">
+        <a
+          href="{{ url_for('sessions.google_login') }}"
+          class="btn btn-primary w-100"
+        >
           <i class="fab fa-facebook-square"></i> Log in with Facebook
-        </button>
+        </a>
         <div class="row mt-2">
           <div class="col-5">
             <hr />
