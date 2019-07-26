@@ -53,3 +53,24 @@ def unfollow(idol_id):
 
     flash(f'You have unfollowed {idol.username}', 'success')
     return redirect(url_for('users.show', username=idol.username))
+
+
+@follower_following_blueprint.route('/<fan_id>/approve', methods=['GET'])
+def approve(fan_id):
+    follow = FollowerFollowing.get_or_none(
+        (FollowerFollowing.fan_id == fan_id) &
+        (FollowerFollowing.idol_id == current_user.id)
+    )
+
+    if not follow:
+        flash('Oops, something went wrong', 'warning')
+        return redirect(url_for('users.index'))
+
+    follow.approved = True
+
+    if not follow.save():
+        flash('Oops, something went wrong', 'warning')
+        return redirect(url_for('users.index'))
+
+    flash(f'You are now being followed by {follow.fan.username}', 'success')
+    return redirect(url_for('users.index'))

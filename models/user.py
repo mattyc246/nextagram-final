@@ -82,10 +82,17 @@ class User(BaseModel):
     @hybrid_property
     def pending_follows(self):
         from models.follower_following import FollowerFollowing
-        follows = User.select().join(
-            FollowerFollowing, on=(User.id == FollowerFollowing.idol_id)
-        ).where(
-            (FollowerFollowing.fan_id == self.id) &
+        follows = FollowerFollowing.select().where(
+            (FollowerFollowing.idol_id == self.id) &
             (FollowerFollowing.approved == False)
         )
         return follows
+
+    @hybrid_property
+    def has_pending_follows(self):
+        from models.follower_following import FollowerFollowing
+        follows = FollowerFollowing.select().where(
+            (FollowerFollowing.idol_id == self.id) &
+            (FollowerFollowing.approved == False)
+        )
+        return True if len(follows) > 0 else False

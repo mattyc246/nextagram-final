@@ -103,7 +103,11 @@
                 height="40"
               />
               <div class="ml-3 my-auto" style="line-height: 0.25rem;">
-                <p class="my-auto">{{ user.username }}</p>
+                <a
+                  href="{{url_for('users.show', username=user.username)}}"
+                  class="my-auto text-dark"
+                  >{{ user.username }}</a
+                >
               </div>
             </div>
             {% endfor %}
