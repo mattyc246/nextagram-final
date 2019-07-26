@@ -68,7 +68,7 @@
               Stories
             </p>
           </div>
-          <div class="card-body" style="overflow-y: scroll;">
+          <div class="card-body pt-0" style="overflow-y: scroll;">
             {% for user in current_user.approved_follows %}
             <div class="d-flex flex-row mt-2">
               <img
@@ -92,19 +92,18 @@
               Suggestions For You
             </p>
           </div>
-          <div class="card-body" style="overflow-y: scroll;">
-            {% for x in range(1,10) %}
+          <div class="card-body pt-0" style="overflow-y: scroll;">
+            {% for user in users %}
             <div class="d-flex flex-row mt-2">
               <img
-                src="{{url_for('static', filename='images/profile-placeholder.png')}}"
+                src="{{ user.profile_url }}"
                 alt="placeholder"
                 class="border border-light rounded-circle"
                 width="40"
                 height="40"
               />
               <div class="ml-3 my-auto" style="line-height: 0.25rem;">
-                <p>Username</p>
-                <small class="text-muted">10 Hours Ago</small>
+                <p class="my-auto">{{ user.username }}</p>
               </div>
             </div>
             {% endfor %}
