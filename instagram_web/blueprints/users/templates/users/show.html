@@ -16,6 +16,7 @@
       <div class="card bg-transparent border-0 p-2">
         <div class="d-flex flex-row justify-content-start">
           <h3 class="my-auto">{{ user.username }}</h3>
+          {% if user.id == current_user.id %}
           <a
             href="{{url_for('users.edit', id=user.id)}}"
             class="btn btn-light btn-sm border ml-4 h-50 my-auto"
@@ -23,11 +24,48 @@
             Edit Profile
           </a>
           <h2 class="ml-4 text-black my-auto"><i class="fas fa-cog"></i></h2>
+          {% else %} {% if current_user.is_following(user) %}
+          <a
+            href="{{url_for('users.edit', id=user.id)}}"
+            class="btn btn-light btn-sm border ml-4 h-50 my-auto"
+          >
+            Following
+          </a>
+          <div class="dropdown my-auto">
+            <a
+              class="btn btn-light btn-sm border ml-2 h-50 my-auto"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              ▼
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a
+                class="dropdown-item text-danger"
+                href="{{url_for('follower_following.unfollow', idol_id=user.id)}}"
+                >Unfollow</a
+              >
+            </div>
+          </div>
+          <h2 class="ml-2">...</h2>
+          {% else %}
+          <a
+            href="{{url_for('follower_following.follow', idol_id=user.id)}}"
+            class="btn btn-primary btn-sm border ml-4 h-50 my-auto"
+          >
+            Follow
+          </a>
+          <a class="btn btn-primary text-white btn-sm border ml-2 h-50 my-auto">
+            ▼
+          </a>
+          <h2 class="ml-2">...</h2>
+          {% endif %} {% endif %}
         </div>
         <div class="d-flex flex-row justify-content mt-3">
-          <h6>29 posts</h6>
-          <h6 class="ml-4">92 followers</h6>
-          <h6 class="ml-4">308 following</h6>
+          <h6>{{ user.images | length }} posts</h6>
+          <h6 class="ml-4">0 followers</h6>
+          <h6 class="ml-4">0 following</h6>
         </div>
         <div class="mt-3 w-50">
           <p>

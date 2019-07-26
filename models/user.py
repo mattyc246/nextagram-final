@@ -3,7 +3,7 @@ import peewee as pw
 import re
 from config import S3_HOST_URL
 from werkzeug.security import generate_password_hash
-from playhouse.hybrid import hybrid_property
+from playhouse.hybrid import hybrid_property, hybrid_method
 
 
 class User(BaseModel):
@@ -60,3 +60,10 @@ class User(BaseModel):
         from models.image import Image
         images = Image.select().where(Image.user_id == self.id)
         return True if len(images) > 0 else False
+
+    @hybrid_method
+    def is_following(self, user):
+        from models.follower_following import FollowerFollowing
+        follow = FollowerFollowing.get_or_none(
+            (FollowerFollowing.fan_id == self.id) & (FollowerFollowing.idol_id == user.id))
+        return False if not follow or not follow.approved else True
