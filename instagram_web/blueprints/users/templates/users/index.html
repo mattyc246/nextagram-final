@@ -15,7 +15,13 @@
               width="40"
               height="40"
             />
-            <h6 class="ml-3 my-auto">{{ image.user.username }}</h6>
+            <h6 class="ml-3 my-auto">
+              <a
+                class="text-dark"
+                href="{{url_for('users.show', username=image.user.username)}}"
+                >{{ image.user.username }}</a
+              >
+            </h6>
             <h3 class="ml-auto">...</h3>
           </div>
         </div>
