@@ -15,6 +15,7 @@ class User(BaseModel):
     bio = pw.TextField(null=True)
     phone_number = pw.CharField(null=True)
     profile_picture = pw.CharField(null=True)
+    private = pw.BooleanField(default=False)
 
     def validate(self):
         email_valid = re.match(r"[^@]+@[^@]+\.[^@]+", self.email)
