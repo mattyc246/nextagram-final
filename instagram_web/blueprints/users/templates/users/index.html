@@ -4,7 +4,8 @@
 <div class="container mt-5 h-100">
   <div class="row justify-content-center h-100">
     <div class="col-7">
-      {% for user in users %} {% for image in user.images %}
+      {% for user in current_user.approved_follows %} {% for image in
+      user.images %}
       <div class="card mt-3">
         <div class="card-header bg-white">
           <div class="d-flex flex-row w-100">
@@ -68,7 +69,7 @@
             </p>
           </div>
           <div class="card-body" style="overflow-y: scroll;">
-            {% for user in users %}
+            {% for user in current_user.approved_follows %}
             <div class="d-flex flex-row mt-2">
               <img
                 src="{{ user.profile_url }}"

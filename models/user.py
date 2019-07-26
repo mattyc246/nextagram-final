@@ -67,3 +67,25 @@ class User(BaseModel):
         follow = FollowerFollowing.get_or_none(
             (FollowerFollowing.fan_id == self.id) & (FollowerFollowing.idol_id == user.id))
         return False if not follow or not follow.approved else True
+
+    @hybrid_property
+    def approved_follows(self):
+        from models.follower_following import FollowerFollowing
+        follows = User.select().join(
+            FollowerFollowing, on=(User.id == FollowerFollowing.idol_id)
+        ).where(
+            (FollowerFollowing.fan_id == self.id) &
+            (FollowerFollowing.approved == True)
+        )
+        return follows
+
+    @hybrid_property
+    def pending_follows(self):
+        from models.follower_following import FollowerFollowing
+        follows = User.select().join(
+            FollowerFollowing, on=(User.id == FollowerFollowing.idol_id)
+        ).where(
+            (FollowerFollowing.fan_id == self.id) &
+            (FollowerFollowing.approved == False)
+        )
+        return follows

@@ -25,10 +25,7 @@
           </a>
           <h2 class="ml-4 text-black my-auto"><i class="fas fa-cog"></i></h2>
           {% else %} {% if current_user.is_following(user) %}
-          <a
-            href="{{url_for('users.edit', id=user.id)}}"
-            class="btn btn-light btn-sm border ml-4 h-50 my-auto"
-          >
+          <a class="btn btn-light btn-sm border ml-4 h-50 my-auto">
             Following
           </a>
           <div class="dropdown my-auto">
