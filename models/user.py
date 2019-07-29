@@ -3,7 +3,7 @@ import peewee as pw
 import re
 from config import S3_HOST_URL
 from werkzeug.security import generate_password_hash
-from playhouse.hybrid import hybrid_property
+from playhouse.hybrid import hybrid_property, hybrid_method
 
 
 class User(BaseModel):
@@ -15,6 +15,7 @@ class User(BaseModel):
     bio = pw.TextField(null=True)
     phone_number = pw.CharField(null=True)
     profile_picture = pw.CharField(null=True)
+    private = pw.BooleanField(default=False)
 
     def validate(self):
         email_valid = re.match(r"[^@]+@[^@]+\.[^@]+", self.email)
@@ -59,3 +60,39 @@ class User(BaseModel):
         from models.image import Image
         images = Image.select().where(Image.user_id == self.id)
         return True if len(images) > 0 else False
+
+    @hybrid_method
+    def is_following(self, user):
+        from models.follower_following import FollowerFollowing
+        follow = FollowerFollowing.get_or_none(
+            (FollowerFollowing.fan_id == self.id) & (FollowerFollowing.idol_id == user.id))
+        return False if not follow or not follow.approved else True
+
+    @hybrid_property
+    def approved_follows(self):
+        from models.follower_following import FollowerFollowing
+        follows = User.select().join(
+            FollowerFollowing, on=(User.id == FollowerFollowing.idol_id)
+        ).where(
+            (FollowerFollowing.fan_id == self.id) &
+            (FollowerFollowing.approved == True)
+        )
+        return follows
+
+    @hybrid_property
+    def pending_follows(self):
+        from models.follower_following import FollowerFollowing
+        follows = FollowerFollowing.select().where(
+            (FollowerFollowing.idol_id == self.id) &
+            (FollowerFollowing.approved == False)
+        )
+        return follows
+
+    @hybrid_property
+    def has_pending_follows(self):
+        from models.follower_following import FollowerFollowing
+        follows = FollowerFollowing.select().where(
+            (FollowerFollowing.idol_id == self.id) &
+            (FollowerFollowing.approved == False)
+        )
+        return True if len(follows) > 0 else False

@@ -4,7 +4,8 @@
 <div class="container mt-5 h-100">
   <div class="row justify-content-center h-100">
     <div class="col-7">
-      {% for user in users %} {% for image in user.images %}
+      {% for user in current_user.approved_follows %} {% for image in
+      user.images %}
       <div class="card mt-3">
         <div class="card-header bg-white">
           <div class="d-flex flex-row w-100">
@@ -15,7 +16,13 @@
               width="40"
               height="40"
             />
-            <h6 class="ml-3 my-auto">{{ image.user.username }}</h6>
+            <h6 class="ml-3 my-auto">
+              <a
+                class="text-dark"
+                href="{{url_for('users.show', username=image.user.username)}}"
+                >{{ image.user.username }}</a
+              >
+            </h6>
             <h3 class="ml-auto">...</h3>
           </div>
         </div>
@@ -61,8 +68,8 @@
               Stories
             </p>
           </div>
-          <div class="card-body" style="overflow-y: scroll;">
-            {% for user in users %}
+          <div class="card-body pt-0" style="overflow-y: scroll;">
+            {% for user in current_user.approved_follows %}
             <div class="d-flex flex-row mt-2">
               <img
                 src="{{ user.profile_url }}"
@@ -85,19 +92,22 @@
               Suggestions For You
             </p>
           </div>
-          <div class="card-body" style="overflow-y: scroll;">
-            {% for x in range(1,10) %}
+          <div class="card-body pt-0" style="overflow-y: scroll;">
+            {% for user in users %}
             <div class="d-flex flex-row mt-2">
               <img
-                src="{{url_for('static', filename='images/profile-placeholder.png')}}"
+                src="{{ user.profile_url }}"
                 alt="placeholder"
                 class="border border-light rounded-circle"
                 width="40"
                 height="40"
               />
               <div class="ml-3 my-auto" style="line-height: 0.25rem;">
-                <p>Username</p>
-                <small class="text-muted">10 Hours Ago</small>
+                <a
+                  href="{{url_for('users.show', username=user.username)}}"
+                  class="my-auto text-dark"
+                  >{{ user.username }}</a
+                >
               </div>
             </div>
             {% endfor %}

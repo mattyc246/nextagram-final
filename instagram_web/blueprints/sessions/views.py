@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from models.user import User
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from instagram_web.util.google_oauth import oauth
 
 sessions_blueprint = Blueprint(
@@ -53,3 +53,9 @@ def authorize():
     login_user(user)
     flash(f'Welcome back {user.username}', 'success')
     return redirect(url_for('users.index'))
+
+
+@sessions_blueprint.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+    return redirect(url_for('home'))

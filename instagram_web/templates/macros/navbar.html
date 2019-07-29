@@ -38,8 +38,20 @@
         ><h3 class="my-auto"><i class="far fa-compass text-dark"></i></h3></a
         >
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><h3 class="my-auto"><i class="far fa-heart text-dark"></i></h3></a>
+      <li class="nav-item dropdown">
+        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <h3 class="my-auto"><i class="far fa-heart text-dark"></i></h3>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="navbarDropdown">
+          {% if current_user.has_pending_follows %}
+          {% for follow in current_user.pending_follows %}
+          <div class="dropdown-item">{{follow.fan.username}} wants to follow you <a href="{{url_for('follower_following.approve', fan_id=follow.fan.id)}}" class="ml-4">Approve</a></div>
+          {% endfor %}
+          {% else %}
+          <a class="dropdown-item" href="#">All Up To Date :)</a>
+          {% endif %}
+        </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{url_for('users.show', username=current_user.username)}}"><h3 class="my-auto"><i class="far fa-user text-dark"></i></h3></a>
